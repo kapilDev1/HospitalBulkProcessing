@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospital Bulk Processing API</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 40px;
+            background-color: #f9fafb;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+        code, pre {
+            background-color: #f3f4f6;
+            padding: 8px;
+            display: block;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .endpoint {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+        }
+        .method {
+            font-weight: bold;
+            color: #2563eb;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table th, table td {
+            border: 1px solid #e5e7eb;
+            padding: 8px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f3f4f6;
+        }
+        .note {
+            background-color: #eef2ff;
+            padding: 10px;
+            border-left: 4px solid #6366f1;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Hospital Bulk Processing API</h1>
+
+<p>
+    This service provides APIs to validate and bulk-create hospital records
+    by integrating with the Hospital Directory API.
+</p>
+
+<hr>
+
+<div class="endpoint">
+    <h2>1. CSV Validation API</h2>
+
+    <p><span class="method">POST</span> <code>/hospitals/bulk/validate</code></p>
+
+    <h3>Description</h3>
+    <p>
+        Validates the uploaded CSV file before processing. No hospital records
+        are created using this endpoint.
+    </p>
+
+    <h3>Request</h3>
+    <p><strong>Content-Type:</strong> multipart/form-data</p>
+
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>file</td>
+            <td>CSV File</td>
+            <td>Yes</td>
+            <td>CSV file containing hospital data</td>
+        </tr>
+    </table>
+
+    <h3>CSV Format</h3>
+    <pre>name,address,phone
+General Hospital,123 Main St,555-1234
+City Care,456 Park Ave,</pre>
+
+    <h3>Success Response</h3>
+    <pre>{
+  "valid": true,
+  "total_hospitals": 2,
+  "preview": [
+    {
+      "name": "General Hospital",
+      "address": "123 Main St",
+      "phone": "555-1234"
+    }
+  ]
+}</pre>
+</div>
+
+<div class="endpoint">
+    <h2>2. Bulk Create Hospitals API</h2>
+
+    <p><span class="method">POST</span> <code>/hospitals/bulk</code></p>
+
+    <h3>Description</h3>
+    <p>
+        Validates a CSV file and process it to create multiple hospital records using the
+        Hospital Directory API. A unique batch ID is generated for each request.
+    </p>
+
+    <h3>Request</h3>
+    <p><strong>Content-Type:</strong> multipart/form-data</p>
+
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Required</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>file</td>
+            <td>CSV File</td>
+            <td>Yes</td>
+            <td>CSV file containing hospital records</td>
+        </tr>
+    </table>
+
+    <h3>Success Response</h3>
+    <pre>{
+  "batch_id": "uuid",
+  "total_hospitals": 2,
+  "processed_hospitals": 2,
+  "failed_hospitals": 0,
+  "processing_time_seconds": 3,
+  "batch_activated": true,
+  "hospitals": [
+    {
+      "row": 1,
+      "hospital_id": 101,
+      "name": "General Hospital",
+      "status": "created_and_activated"
+    }
+  ]
+}</pre>
+
+    <div class="note">
+        <strong>Note:</strong> Batch activation is performed only if all hospital
+        records are created successfully.
+    </div>
+</div>
+
+<hr>
+
+
+</body>
+</html>

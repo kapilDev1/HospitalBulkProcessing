@@ -1,4 +1,4 @@
-#from django.shortcuts import render
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -122,3 +122,6 @@ class BulkHospitalCreateView(APIView):
                 "batch_activated":batch_activated,
                 "hospitals":results
         },status=status.HTTP_201_CREATED)
+
+def app_home(request):
+    return render(request, 'home.html')
