@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-msf3=jhcxe_cfq3dp^s_i-k_z$o@llc!7(#j$##px9oxzj3$^a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
 
 ALLOWED_HOSTS = ['hospitalbulkprocessing.onrender.com']
 
